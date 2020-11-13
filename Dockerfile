@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.6.12
 
 MAINTANER Your Name "serinahmad00@gmail.com"
 
@@ -9,8 +9,6 @@ WORKDIR /dock
 RUN python3 -m pip install -r requirements.txt
 
 COPY . /dock
-
-ENTRYPOINT [ "python" ]
 
 EXPOSE 5000/tcp
 EXPOSE 5000/udp
