@@ -9,34 +9,43 @@ app = Flask(__name__)
 def index1():
     return 'Hello, World!'
 
+def get_arguments():
+    parser = argparse.ArgumentParser(description='Get pickle file')
+    parser.add_argument('-path', help='get pickle file', required=True)
+    args = parser.parse_args()
+    return args.path
+
 @app.route('/predict', methods = ["GET", "POST"]) 
-def price_pred():
+
+def price_prediction():
     #if the request is POST request
     if request.method == 'POST':
-         price = 0
-            # get the features
-        features = request.get_json()
-            #load the linear model
-        loaded_model = pickle.load(open('./model.sav', 'rb'))
-        # calculate the price
-        for index, feature in enumerate(features["features"]):
-            price += float(feature) * float(thetas[index])
-        x = np.array(features["features"]).reshape(1,6)
-        result = loaded_model.predict(x)
-        price += theta0    
-        if x.shape[0] == 1:
-            result = result[0]
-            print(result)
-            return json.dumps(price)
-
-        return json.dumps(result)
+        data = request.get_json()
+        for i in range(6):    
+           features.append(json_req['features'])
+        
+        features = np.array(features, dtype=float).reshape(1,6)
+        predicted_price = loaded_model.price_prediction(features)[0]
+        prediction = {'predicted_price': predicted_price}
+        return jsonify(prediction)
     else:
-        return
+        data = request.get_json()
+        for i in range(6):
+        transaction_date = request.args.get('transaction_date'))
+        house_age = request.args.get('house_age'))
+        nearest_distance = request.args.get('nearest_distance'))
+        num_convenience_stores = request.args.get('num_convenience_stores'))
+        latitude = request.args.get('latitude'))
+        longitude = request.args.get('longitude'))
+        features = np.array([transaction_date, house_age, nearest_distance,
+                                   num_convenience_stores, latitude, longitude]).reshape(1, 6)
+        predicted_price = loaded_model.price_prediction(features)[0]
+        pred_price = {'predicted_price': predicted_price}
+        return jsonify(pred_price)
+         
+    
 if __name__=='__main__':
-    theta0 = None
-    thetas = None
-
-    paras = pd.read_csv('lm_parameters.csv')
-    theta0 = paras.iloc[0,0] 
-    thetas = paras.columns 
-    app.run(debug=True, host='0.0.0.0', port=5000)
+  file_path = get_arguments()
+  #Load the model 
+  loaded_model = pickle.load(open(file_path, 'rb'))  
+  app.run(debug=True, host='0.0.0.0', port=5000)
