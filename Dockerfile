@@ -1,21 +1,18 @@
-FROM ubuntu:18.04
+FROM python:3.6-slim
 
 MAINTANER Your Name "serinahmad00@gmail.com"
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
-
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
+COPY ./Flask-edited
 
 WORKDIR /dock
 
-RUN pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt
 
 COPY . /dock
 
 ENTRYPOINT [ "python" ]
 
-EXPOSE 5000
+EXPOSE 5000/tcp
+EXPOSE 5000/udp
 
 CMD [ "main.py" ]
