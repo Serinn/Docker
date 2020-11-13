@@ -17,35 +17,35 @@ def get_arguments():
 
 @app.route('/predict', methods = ["GET", "POST"]) 
 
-def price_prediction():
-    #if the request is POST request
+def predict():
+    
     if request.method == 'POST':
         data = request.get_json()
         for i in range(6):    
            features.append(json_req['features'])
-        
         features = np.array(features, dtype=float).reshape(1,6)
-        predicted_price = loaded_model.price_prediction(features)[0]
+        predicted_price = model.predict(features)[0]
         prediction = {'predicted_price': predicted_price}
         return jsonify(prediction)
+    
     else:
+        
         data = request.get_json()
         for i in range(6):
+        longitude = request.args.get('longitude'))
+        latitude = request.args.get('latitude'))
+        nearest_distance = request.args.get('nearest_distance'))
         transaction_date = request.args.get('transaction_date'))
         house_age = request.args.get('house_age'))
-        nearest_distance = request.args.get('nearest_distance'))
         num_convenience_stores = request.args.get('num_convenience_stores'))
-        latitude = request.args.get('latitude'))
-        longitude = request.args.get('longitude'))
-        features = np.array([transaction_date, house_age, nearest_distance,
-                                   num_convenience_stores, latitude, longitude]).reshape(1, 6)
-        predicted_price = loaded_model.price_prediction(features)[0]
+        features = np.array([longitude, latitude, nearest_distance, transaction_date, house_age, num_convenience_stores]).reshape(1, 6)
+        predicted_price = model.predict(features)
         pred_price = {'predicted_price': predicted_price}
         return jsonify(pred_price)
          
-    
+        
 if __name__=='__main__':
   file_path = get_arguments()
   #Load the model 
-  loaded_model = pickle.load(open(file_path, 'rb'))  
+  model = pickle.load(open(file_path, 'rb'))  
   app.run(debug=True, host='0.0.0.0', port=5000)
