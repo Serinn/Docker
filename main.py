@@ -45,7 +45,7 @@ def predict():
          
         
 if __name__=='__main__':
-  file_path = get_arguments()
+  path = get_arguments()
   #Load the model 
-  model = pickle.load(open(file_path, 'rb'))  
+  model = pickle.load(open(path, 'rb'))  
   app.run(debug=True, host='0.0.0.0', port=5000)
