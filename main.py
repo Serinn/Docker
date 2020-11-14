@@ -22,7 +22,7 @@ def predict():
     if request.method == 'POST':
         data = request.get_json()
         for i in range(6):    
-           features.append(json_req['features'])
+           features.append(data['features'])
         features = np.array(features, dtype=float).reshape(1,6)
         predicted_price = model.predict(features)[0]
         pred_price = {'predicted_price': predicted_price}
