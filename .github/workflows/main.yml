@@ -17,22 +17,20 @@ jobs:
           heroku_email: "serin.ahmad@stu.najah.edu"
           usedocker: 1 
           
-   Docker-hub:
-        runs-on: ubuntu-latest
 
-        steps:
-          - uses: actions/checkout@v1
-          - name: login to my DockerHub
-            uses: docker/login-action@v1
-            with:
+
+      - uses: actions/checkout@v1
+      - name: login to my DockerHub
+        uses: docker/login-action@v1
+        with:
              username: ${{ secrets.DOCK_USERNAME }}
              password: ${{ secrets.DOCK_PASSWORD }}
-          - name: Build
-            run: docker build -t Docker 
-          - name: Tags
-            run: |
+      - name: Build
+        run: docker build -t Docker 
+      - name: Tags
+        run: |
              docker tag Docker ${{ secrets.DOCK_USERNAME }}/Docker:latest
-          - name: Push
-            run: |
+      - name: Push
+        run: |
              docker push ${{ secrets.DOCK_USERNAME }}/Docker:latest 
              
