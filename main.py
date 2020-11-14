@@ -25,7 +25,7 @@ def predict():
            features.append(json_req['features'])
         features = np.array(features, dtype=float).reshape(1,6)
         predicted_price = model.predict(features)[0]
-        prediction = {'predicted_price': predicted_price}
+        pred_price = {'predicted_price': predicted_price}
         return jsonify(prediction)
     
     else:
